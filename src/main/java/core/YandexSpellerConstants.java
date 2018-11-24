@@ -11,23 +11,34 @@ public class YandexSpellerConstants {
     public static final String PARAM_TEXT = "text";
     public static final String PARAM_OPTIONS = "options";
     public static final String PARAM_LANG = "lang";
-    public static final String WRONG_WORD_UK = "питаня";
-    public static final String WORD_WITH_WRONG_CAPITAL = "moscow";
-    public static final String WORD_WITH_LEADING_DIGITS = "11" + SimpleWord.BROTHER.corrVer;
+    public static final String EN_REPEATED_WORD = "how";
+    public static final String RU_REPEATED_WORD = "записано";
+    public static final String UKR_REPEATED_WORD = "лише";
     public static final String QUOTES = "\"";
 
-
-    public enum SimpleWord{
-        MOTHER("mother", "mottherr"),
-        BROTHER("brother", "bbrother");
+    public enum SimpleWord {
+        EN_MOSCOW("Moscow", "moscow"),
+        EN_YORK("York", "york"),
+        EN_VLADIVOSTOK("Vladivostok", "VladiVostok"),
+        RU_MOSCOW("Москва", "москва"),
+        RU_YORK("Нью-Йорк", "Нью-йорк"),
+        RU_VLADIVOSTOK("Владивосток", "ВладиВосток"),
+        EN_WORD_WITH_DIGITS("Age 23", "Age23"),
+        RU_WORD_WITH_DIGITS("Возраст 23", "Возраст23"),
+        UKR_WORD_WITH_DIGITS("вік 23", "вік23");
 
         private String corrVer;
         private String wrongVer;
 
-        public String corrVer(){return corrVer;}
-        public String wrongVer(){return wrongVer;}
+        public String corrVer() {
+            return corrVer;
+        }
 
-        private SimpleWord(String corrVer, String wrongVer){
+        public String wrongVer() {
+            return wrongVer;
+        }
+
+        private SimpleWord(String corrVer, String wrongVer) {
             this.corrVer = corrVer;
             this.wrongVer = wrongVer;
 
@@ -39,7 +50,10 @@ public class YandexSpellerConstants {
         UK("uk"),
         EN("en");
         private String languageCode;
-        public String langCode(){return languageCode;}
+
+        public String langCode() {
+            return languageCode;
+        }
 
         private Language(String lang) {
             this.languageCode = lang;

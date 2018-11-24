@@ -62,7 +62,7 @@ public class YandexSpellerSOAP {
                     "      <spel:" + soapReq.action.reqName + " lang=" + QUOTES + (soapReq.params.getOrDefault(PARAM_LANG, "en")) + QUOTES
                     +  " options=" + QUOTES + (soapReq.params.getOrDefault(PARAM_OPTIONS, "0"))+ QUOTES
                     + " format=\"\">\n" +
-                    "         <spel:text>"+ (soapReq.params.getOrDefault(PARAM_TEXT, SimpleWord.BROTHER.wrongVer())) + "</spel:text>\n" +
+                    "         <spel:text>"+ (soapReq.params.getOrDefault(PARAM_TEXT, SimpleWord.UKR_WORD_WITH_DIGITS.wrongVer())) + "</spel:text>\n" +
                     "      </spel:"+ soapReq.action.reqName + ">\n" +
                     "   </soapenv:Body>\n" +
                     "</soapenv:Envelope>";

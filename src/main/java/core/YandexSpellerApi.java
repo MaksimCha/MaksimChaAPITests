@@ -29,6 +29,7 @@ public class YandexSpellerApi {
     //builder pattern
     private YandexSpellerApi() {
     }
+
     private HashMap<String, String> params = new HashMap<>();
 
     public static class ApiBuilder {
@@ -68,13 +69,14 @@ public class YandexSpellerApi {
 
 
     //get ready Speller answers list form api response
-    public static List<YandexSpellerAnswer> getYandexSpellerAnswers(Response response){
-        return new Gson().fromJson( response.asString().trim(), new TypeToken<List<YandexSpellerAnswer>>() {}.getType());
+    public static List<YandexSpellerAnswer> getYandexSpellerAnswers(Response response) {
+        return new Gson().fromJson(response.asString().trim(), new TypeToken<List<YandexSpellerAnswer>>() {
+        }.getType());
     }
 
 
     //set base request and response specifications tu use in tests
-    public static ResponseSpecification successResponse(){
+    public static ResponseSpecification successResponse() {
         return new ResponseSpecBuilder()
                 .expectContentType(ContentType.JSON)
                 .expectHeader("Connection", "keep-alive")
@@ -83,7 +85,7 @@ public class YandexSpellerApi {
                 .build();
     }
 
-    public static RequestSpecification baseRequestConfiguration(){
+    public static RequestSpecification baseRequestConfiguration() {
         return new RequestSpecBuilder()
                 .setAccept(ContentType.XML)
                 .setRelaxedHTTPSValidation()
