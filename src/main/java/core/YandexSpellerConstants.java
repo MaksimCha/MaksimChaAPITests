@@ -25,7 +25,13 @@ public class YandexSpellerConstants {
         RU_VLADIVOSTOK("Владивосток", "ВладиВосток"),
         EN_WORD_WITH_DIGITS("Age 23", "Age23"),
         RU_WORD_WITH_DIGITS("Возраст 23", "Возраст23"),
-        UKR_WORD_WITH_DIGITS("вік 23", "вік23");
+        UKR_WORD_WITH_DIGITS("вік 23", "вік23"),
+        RU_USING("использованием", "исползованием"),
+        RU_EQUATION("уравнение", "уравниние"),
+        EN_TEST_STEPS("Test Steps", "TestSteps"),
+        EN_TEST_CASE("Test Case", "TestCase"),
+        UKR_IF("колі", "коль"),
+        UKR_YOUNG("наймолодших", "найсолодших");
 
         private String corrVer;
         private String wrongVer;

@@ -17,23 +17,23 @@ public class TestYandexSpellerSOAP {
     @Test
     public void simpleCall() {
         YandexSpellerSOAP
-                .with().text(SimpleWord.UKR_WORD_WITH_DIGITS.wrongVer())
+                .with().text(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer())
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
-                        (Arrays.asList(SimpleWord.UKR_WORD_WITH_DIGITS.wrongVer(), SimpleWord.UKR_WORD_WITH_DIGITS.corrVer())));
+                        (Arrays.asList(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer(), SimpleWord.EN_WORD_WITH_DIGITS.corrVer())));
     }
 
     @Test
     public void useRequestBuilderToChangeParams() {
         YandexSpellerSOAP.with()
                 .language(Language.EN)
-                .text(SimpleWord.UKR_WORD_WITH_DIGITS.wrongVer())
+                .text(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer())
                 .options("6")
                 .action(SoapAction.CHECK_TEXTS)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
-                        (Arrays.asList(SimpleWord.UKR_WORD_WITH_DIGITS.wrongVer(), SimpleWord.UKR_WORD_WITH_DIGITS.corrVer())));
+                        (Arrays.asList(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer(), SimpleWord.EN_WORD_WITH_DIGITS.corrVer())));
     }
 }

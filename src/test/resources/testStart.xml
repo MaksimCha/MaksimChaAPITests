@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Test Suite" parallel="methods" thread-count="3" >
+    <test name="Simple Test" >
+
+        <classes>
+            <class name="hw.CheckTextTestEn" />
+            <class name="hw.CheckTextTestRu" />
+            <class name="hw.CheckTextTestUkr" />
+        </classes>
+
+    </test>
+</suite>
