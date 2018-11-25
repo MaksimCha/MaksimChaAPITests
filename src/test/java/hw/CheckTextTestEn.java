@@ -33,7 +33,7 @@ public class CheckTextTestEn extends TestBase {
         YandexSpellerSOAP.with()
                 .text(TEXT_EN)
                 .options("8")
-                .action(SoapAction.CHECK_TEXTS)
+                .action(SoapAction.CHECK_TEXT)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
@@ -52,13 +52,32 @@ public class CheckTextTestEn extends TestBase {
         YandexSpellerSOAP.with()
                 .text(TEXT_EN)
                 .options("512")
-                .action(SoapAction.CHECK_TEXTS)
+                .action(SoapAction.CHECK_TEXT)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
                         (Arrays.asList(
                                 EN_TEST_STEPS.wrongVer(), EN_TEST_STEPS.corrVer(),
                                 EN_TEST_CASE.wrongVer(), EN_TEST_CASE.corrVer(),
+                                EN_WORD_WITH_DIGITS.wrongVer(), EN_WORD_WITH_DIGITS.corrVer())));
+    }
+
+    @Test
+    public void checkTextsTest() {
+        YandexSpellerSOAP.with()
+                .text(TEXT_EN)
+                .options("8")
+                .action(SoapAction.CHECK_TEXTS)
+                .callSOAP()
+                .then()
+                .body(Matchers.stringContainsInOrder
+                        (Arrays.asList(
+                                EN_REPEATED_WORD,
+                                EN_TEST_STEPS.wrongVer(), EN_TEST_STEPS.corrVer(),
+                                EN_TEST_CASE.wrongVer(), EN_TEST_CASE.corrVer(),
+                                EN_YORK.wrongVer(), EN_YORK.corrVer(),
+                                EN_MOSCOW.wrongVer(), EN_MOSCOW.corrVer(),
+                                EN_VLADIVOSTOK.wrongVer(), EN_VLADIVOSTOK.corrVer(),
                                 EN_WORD_WITH_DIGITS.wrongVer(), EN_WORD_WITH_DIGITS.corrVer())));
     }
 }

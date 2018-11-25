@@ -157,7 +157,6 @@ public class TestYandexSpellerJSON {
         assertThat(answers.get(2).s.get(0), equalTo(SimpleWord.RU_MOSCOW.wrongVer()));
     }
 
-
     @Test
     public void optionsValueIgnoreDigits() {
         List<YandexSpellerAnswer> answers =
