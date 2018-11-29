@@ -7,6 +7,11 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 
 import static core.YandexSpellerConstants.*;
+import static core.YandexSpellerConstants.Language.*;
+import static core.YandexSpellerConstants.Options.FIND_REPEAT_WORDS;
+import static core.YandexSpellerConstants.SimpleWord.*;
+import static core.YandexSpellerConstants.SimpleWord.EN_WORD_WITH_DIGITS;
+import static core.YandexSpellerConstants.SoapAction.CHECK_TEXT;
 
 /**
  * Created by yulia_atlasova@epam.com.
@@ -17,23 +22,23 @@ public class TestYandexSpellerSOAP {
     @Test
     public void simpleCall() {
         YandexSpellerSOAP
-                .with().text(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer())
+                .with().text(EN_WORD_WITH_DIGITS.wrongVer())
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
-                        (Arrays.asList(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer(), SimpleWord.EN_WORD_WITH_DIGITS.corrVer())));
+                        (Arrays.asList(EN_WORD_WITH_DIGITS.wrongVer(), EN_WORD_WITH_DIGITS.corrVer())));
     }
 
     @Test
     public void useRequestBuilderToChangeParams() {
         YandexSpellerSOAP.with()
-                .language(Language.EN)
-                .text(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer())
-                .options("6")
+                .language(EN)
+                .texts(EN_WORD_WITH_DIGITS.wrongVer(), EN_MOSCOW.wrongVer())
+                .options(FIND_REPEAT_WORDS)
                 .action(SoapAction.CHECK_TEXTS)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
-                        (Arrays.asList(SimpleWord.EN_WORD_WITH_DIGITS.wrongVer(), SimpleWord.EN_WORD_WITH_DIGITS.corrVer())));
+                        (Arrays.asList(EN_WORD_WITH_DIGITS.wrongVer(), EN_WORD_WITH_DIGITS.corrVer())));
     }
 }

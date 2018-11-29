@@ -58,7 +58,7 @@ public class YandexSpellerApi {
             return RestAssured.with()
                     .queryParams(spellerApi.params)
                     .log().all()
-                    .get(YANDEX_SPELLER_API_URI).prettyPeek();
+                    .get(YANDEX_SPELLER_CHECK_TEXT_URI).prettyPeek();
         }
     }
 
@@ -91,7 +91,7 @@ public class YandexSpellerApi {
                 .setRelaxedHTTPSValidation()
                 .addHeader("custom header2", "header2.value")
                 .addQueryParam("requestID", new Random().nextLong())
-                .setBaseUri(YANDEX_SPELLER_API_URI)
+                .setBaseUri(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .build();
     }
 }

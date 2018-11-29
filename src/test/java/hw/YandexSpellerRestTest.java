@@ -2,16 +2,34 @@ package hw;
 
 import base.TestBase;
 import core.YandexSpellerSOAP;
+import io.restassured.RestAssured;
+import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
 import static core.YandexSpellerConstants.*;
+import static core.YandexSpellerConstants.Options.IGNORE_CAPITALIZATION;
+import static core.YandexSpellerConstants.Options.IGNORE_DIGITS;
 import static core.YandexSpellerConstants.SimpleWord.*;
+import static core.YandexSpellerConstants.SoapAction.CHECK_TEXT;
+import static org.apache.http.HttpStatus.*;
 
-public class CheckTextTestEn extends TestBase {
+public class YandexSpellerRestTest extends TestBase {
 
+    @Test
+    public void statusTest() {
+        RestAssured
+                .given()
+                .log().everything()
+                .when()
+                .get(YANDEX_SPELLER_CHECK_TEXT_URI)
+                .prettyPeek()
+                .then()
+                .assertThat()
+                .statusCode(SC_OK);
+    }
     @Test
     public void checkTextTest() {
         YandexSpellerSOAP.with()
@@ -32,8 +50,8 @@ public class CheckTextTestEn extends TestBase {
     public void checkRepeatedWordsTest() {
         YandexSpellerSOAP.with()
                 .text(TEXT_EN)
-                .options("8")
-                .action(SoapAction.CHECK_TEXT)
+                .options(IGNORE_DIGITS)
+                .action(CHECK_TEXT)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
@@ -51,8 +69,8 @@ public class CheckTextTestEn extends TestBase {
     public void checkIgnoreCapitalization() {
         YandexSpellerSOAP.with()
                 .text(TEXT_EN)
-                .options("512")
-                .action(SoapAction.CHECK_TEXT)
+                .options(IGNORE_CAPITALIZATION)
+                .action(CHECK_TEXT)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder
@@ -66,7 +84,7 @@ public class CheckTextTestEn extends TestBase {
     public void checkTextsTest() {
         YandexSpellerSOAP.with()
                 .text(TEXT_EN)
-                .options("8")
+                .options(IGNORE_DIGITS)
                 .action(SoapAction.CHECK_TEXTS)
                 .callSOAP()
                 .then()

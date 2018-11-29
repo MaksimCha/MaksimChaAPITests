@@ -4,9 +4,7 @@
     <test name="Simple Test" >
 
         <classes>
-            <class name="hw.CheckTextTestEn" />
-            <class name="hw.CheckTextTestRu" />
-            <class name="hw.CheckTextTestUkr" />
+            <class name="hw.YandexSpellerRestTest" />
         </classes>
 
     </test>

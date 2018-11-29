@@ -39,7 +39,7 @@ public class TestYandexSpellerJSON {
                 .body("some body payroll")
                 .log().everything()
                 .when()
-                .get(YANDEX_SPELLER_API_URI)
+                .get(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek()
                 .then()
                 .assertThat()
@@ -57,9 +57,10 @@ public class TestYandexSpellerJSON {
         //GET
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .queryParam(PARAM_TEXT, SimpleWord.EN_TEST_STEPS.wrongVer(), SimpleWord.EN_TEST_STEPS.wrongVer())
+                .param("lang", "en")
                 .log().everything()
-                .get(YANDEX_SPELLER_API_URI)
+                .get(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
         System.out.println(repeat("=", 100));
 
@@ -68,7 +69,7 @@ public class TestYandexSpellerJSON {
                 .given()
                 .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
                 .log().everything()
-                .post(YANDEX_SPELLER_API_URI)
+                .post(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
         System.out.println(repeat("=", 100));
 
@@ -77,7 +78,7 @@ public class TestYandexSpellerJSON {
                 .given()
                 .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
                 .log().everything()
-                .head(YANDEX_SPELLER_API_URI)
+                .head(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
         System.out.println(repeat("=", 100));
 
@@ -86,7 +87,7 @@ public class TestYandexSpellerJSON {
                 .given()
                 .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
                 .log().everything()
-                .options(YANDEX_SPELLER_API_URI)
+                .options(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
         System.out.println(repeat("=", 100));
 
@@ -95,7 +96,7 @@ public class TestYandexSpellerJSON {
                 .given()
                 .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
                 .log().everything()
-                .put(YANDEX_SPELLER_API_URI)
+                .put(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
         System.out.println(repeat("=", 100));
 
@@ -105,7 +106,7 @@ public class TestYandexSpellerJSON {
                 .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
                 .log()
                 .everything()
-                .patch(YANDEX_SPELLER_API_URI)
+                .patch(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
         System.out.println(repeat("=", 100));
 
@@ -115,7 +116,7 @@ public class TestYandexSpellerJSON {
                 .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
                 .log()
                 .everything()
-                .delete(YANDEX_SPELLER_API_URI).prettyPeek()
+                .delete(YANDEX_SPELLER_CHECK_TEXT_URI).prettyPeek()
                 .then()
                 .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED)
                 .statusLine("HTTP/1.1 405 Method not allowed");

@@ -5,7 +5,10 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import static core.YandexSpellerConstants.*;
 
@@ -23,10 +26,12 @@ public class YandexSpellerSOAP {
             .build();
 
     //builder pattern
-    private YandexSpellerSOAP(){}
+    private YandexSpellerSOAP() {
+    }
 
     private HashMap<String, String> params = new HashMap<>();
     private SoapAction action = SoapAction.CHECK_TEXT;
+    private List<String> texts = new ArrayList<>();
 
     public static class SOAPBuilder {
         YandexSpellerSOAP soapReq;
@@ -35,38 +40,47 @@ public class YandexSpellerSOAP {
             this.soapReq = soap;
         }
 
-        public YandexSpellerSOAP.SOAPBuilder action(SoapAction action){
+        public YandexSpellerSOAP.SOAPBuilder action(SoapAction action) {
             soapReq.action = action;
             return this;
         }
 
         public YandexSpellerSOAP.SOAPBuilder text(String text) {
-            soapReq.params.put(PARAM_TEXT, text);
+            soapReq.texts.add(text);
             return this;
         }
 
-        public YandexSpellerSOAP.SOAPBuilder options(String options) {
-            soapReq.params.put(PARAM_OPTIONS, options);
+        public YandexSpellerSOAP.SOAPBuilder texts(String... texts) {
+            soapReq.texts.addAll(Arrays.asList(texts));
+            return this;
+        }
+
+        public YandexSpellerSOAP.SOAPBuilder options(Options option) {
+            soapReq.params.put(PARAM_OPTIONS, option.code);
             return this;
         }
 
         public YandexSpellerSOAP.SOAPBuilder language(Language language) {
-            soapReq.params.put(PARAM_LANG,   language.langCode());
+            soapReq.params.put(PARAM_LANG, language.langCode());
             return this;
         }
 
         public Response callSOAP() {
-            String soapBody="<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:spel=\"http://speller.yandex.net/services/spellservice\">\n" +
+            StringBuilder preparedText = new StringBuilder();
+            for (String text : soapReq.texts) {
+                preparedText.append("         <spel:text>").append(text).append("</spel:text>\n");
+            }
+            String soapBody = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:spel=\"http://speller.yandex.net/services/spellservice\">\n" +
                     "   <soapenv:Header/>\n" +
                     "   <soapenv:Body>\n" +
                     "      <spel:" + soapReq.action.reqName + " lang=" + QUOTES + (soapReq.params.getOrDefault(PARAM_LANG, "en")) + QUOTES
-                    +  " options=" + QUOTES + (soapReq.params.getOrDefault(PARAM_OPTIONS, "0"))+ QUOTES
+                    + " options=" + QUOTES + (soapReq.params.getOrDefault(PARAM_OPTIONS, "0")) + QUOTES
                     + " format=\"\">\n" +
-                    "         <spel:text>"+ (soapReq.params.getOrDefault(PARAM_TEXT, SimpleWord.UKR_WORD_WITH_DIGITS.wrongVer())) + "</spel:text>\n" +
-                    "      </spel:"+ soapReq.action.reqName + ">\n" +
+                    preparedText.toString() +
+                    "      </spel:" + soapReq.action.reqName + ">\n" +
                     "   </soapenv:Body>\n" +
                     "</soapenv:Envelope>";
-
+            soapReq.texts.clear();
 
             return RestAssured.with()
                     .spec(spellerSOAPreqSpec)

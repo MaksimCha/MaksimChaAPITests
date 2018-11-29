@@ -7,7 +7,8 @@ package core;
 public class YandexSpellerConstants {
 
     //useful constants for API under test
-    public static final String YANDEX_SPELLER_API_URI = "https://speller.yandex.net/services/spellservice.json/checkText";
+    public static final String YANDEX_SPELLER_CHECK_TEXT_URI = "https://speller.yandex.net/services/spellservice.json/checkText";
+    public static final String YANDEX_SPELLER_CHECK_TEXTS_URI = "https://speller.yandex.net/services/spellservice.json/checkTexts";
     public static final String PARAM_TEXT = "text";
     public static final String PARAM_OPTIONS = "options";
     public static final String PARAM_LANG = "lang";
@@ -55,13 +56,14 @@ public class YandexSpellerConstants {
         RU("ru"),
         UK("uk"),
         EN("en");
+
         private String languageCode;
 
         public String langCode() {
             return languageCode;
         }
 
-        private Language(String lang) {
+        Language(String lang) {
             this.languageCode = lang;
         }
     }
@@ -69,12 +71,26 @@ public class YandexSpellerConstants {
     public enum SoapAction {
         CHECK_TEXT("checkText", "CheckTextRequest"),
         CHECK_TEXTS("checkTexts", "CheckTextsRequest");
+
         String method;
         String reqName;
 
-        private SoapAction(String action, String reqName) {
+        SoapAction(String action, String reqName) {
             this.method = action;
             this.reqName = reqName;
+        }
+    }
+
+    public enum Options {
+        IGNORE_DIGITS("2"),
+        IGNORE_URLS("4"),
+        FIND_REPEAT_WORDS("8"),
+        IGNORE_CAPITALIZATION("512");
+
+        String code;
+
+        Options(String code) {
+            this.code = code;
         }
     }
 }
