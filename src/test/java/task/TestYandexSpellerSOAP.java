@@ -1,17 +1,16 @@
 package task;
 
 import core.YandexSpellerSOAP;
+import enums.Actions;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
 
-import static core.YandexSpellerConstants.*;
-import static core.YandexSpellerConstants.Language.*;
-import static core.YandexSpellerConstants.Options.FIND_REPEAT_WORDS;
-import static core.YandexSpellerConstants.SimpleWord.*;
-import static core.YandexSpellerConstants.SimpleWord.EN_WORD_WITH_DIGITS;
-import static core.YandexSpellerConstants.SoapAction.CHECK_TEXT;
+import static enums.Language.EN;
+import static enums.Options.FIND_REPEAT_WORDS;
+import static enums.SimpleWord.EN_MOSCOW;
+import static enums.SimpleWord.EN_WORD_WITH_DIGITS;
 
 /**
  * Created by yulia_atlasova@epam.com.
@@ -35,7 +34,7 @@ public class TestYandexSpellerSOAP {
                 .language(EN)
                 .texts(EN_WORD_WITH_DIGITS.wrongVer(), EN_MOSCOW.wrongVer())
                 .options(FIND_REPEAT_WORDS)
-                .action(SoapAction.CHECK_TEXTS)
+                .action(Actions.CHECK_TEXTS)
                 .callSOAP()
                 .then()
                 .body(Matchers.stringContainsInOrder

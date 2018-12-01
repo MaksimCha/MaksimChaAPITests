@@ -19,7 +19,7 @@ public class TestBase {
 
     @BeforeClass(alwaysRun = true)
     public void beforeTestEn() throws IOException {
-        InputStream input = new FileInputStream("lang.properties");
+        InputStream input = new FileInputStream("props\\cap.properties");
         prop.load(new InputStreamReader(input, Charset.forName("Cp1251")));
         TEXT_EN = prop.getProperty("enText");
         TEXT_RU = prop.getProperty("ruText");

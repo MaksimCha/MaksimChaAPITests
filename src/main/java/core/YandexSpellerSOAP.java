@@ -1,5 +1,8 @@
 package core;
 
+import enums.Language;
+import enums.Options;
+import enums.Actions;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
@@ -30,7 +33,7 @@ public class YandexSpellerSOAP {
     }
 
     private HashMap<String, String> params = new HashMap<>();
-    private SoapAction action = SoapAction.CHECK_TEXT;
+    private Actions action = Actions.CHECK_TEXT;
     private List<String> texts = new ArrayList<>();
 
     public static class SOAPBuilder {
@@ -40,7 +43,7 @@ public class YandexSpellerSOAP {
             this.soapReq = soap;
         }
 
-        public YandexSpellerSOAP.SOAPBuilder action(SoapAction action) {
+        public YandexSpellerSOAP.SOAPBuilder action(Actions action) {
             soapReq.action = action;
             return this;
         }
@@ -55,8 +58,12 @@ public class YandexSpellerSOAP {
             return this;
         }
 
-        public YandexSpellerSOAP.SOAPBuilder options(Options option) {
-            soapReq.params.put(PARAM_OPTIONS, option.code);
+        public YandexSpellerSOAP.SOAPBuilder options(Options ... options) {
+            int sum = 0;
+            for (Options option : options) {
+                sum += option.getCode();
+            }
+            soapReq.params.put(PARAM_OPTIONS, String.valueOf(sum));
             return this;
         }
 
@@ -73,18 +80,18 @@ public class YandexSpellerSOAP {
             String soapBody = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:spel=\"http://speller.yandex.net/services/spellservice\">\n" +
                     "   <soapenv:Header/>\n" +
                     "   <soapenv:Body>\n" +
-                    "      <spel:" + soapReq.action.reqName + " lang=" + QUOTES + (soapReq.params.getOrDefault(PARAM_LANG, "en")) + QUOTES
+                    "      <spel:" + soapReq.action.getReqName() + " lang=" + QUOTES + (soapReq.params.getOrDefault(PARAM_LANG, "en")) + QUOTES
                     + " options=" + QUOTES + (soapReq.params.getOrDefault(PARAM_OPTIONS, "0")) + QUOTES
                     + " format=\"\">\n" +
                     preparedText.toString() +
-                    "      </spel:" + soapReq.action.reqName + ">\n" +
+                    "      </spel:" + soapReq.action.getReqName() + ">\n" +
                     "   </soapenv:Body>\n" +
                     "</soapenv:Envelope>";
             soapReq.texts.clear();
 
             return RestAssured.with()
                     .spec(spellerSOAPreqSpec)
-                    .header("SOAPAction", "http://speller.yandex.net/services/spellservice/" + soapReq.action.method)
+                    .header("SOAPAction", "http://speller.yandex.net/services/spellservice/" + soapReq.action.getMethod())
                     .body(soapBody)
                     .log().all().with()
                     .post().prettyPeek();

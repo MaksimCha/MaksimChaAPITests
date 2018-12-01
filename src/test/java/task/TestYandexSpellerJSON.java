@@ -12,8 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static core.YandexSpellerConstants.*;
-import static core.YandexSpellerConstants.SimpleWord.EN_MOSCOW;
-import static core.YandexSpellerConstants.SimpleWord.UKR_WORD_WITH_DIGITS;
+import static enums.Actions.CHECK_TEXT;
+import static enums.Language.UK;
+import static enums.Options.*;
+import static enums.SimpleWord.*;
 import static org.apache.commons.lang3.StringUtils.repeat;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -57,7 +59,7 @@ public class TestYandexSpellerJSON {
         //GET
         RestAssured
                 .given()
-                .queryParam(PARAM_TEXT, SimpleWord.EN_TEST_STEPS.wrongVer(), SimpleWord.EN_TEST_STEPS.wrongVer())
+                .queryParam(PARAM_TEXT, EN_TEST_STEPS.wrongVer(), EN_TEST_STEPS.wrongVer())
                 .param("lang", "en")
                 .log().everything()
                 .get(YANDEX_SPELLER_CHECK_TEXT_URI)
@@ -67,7 +69,7 @@ public class TestYandexSpellerJSON {
         //POST
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .log().everything()
                 .post(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
@@ -76,7 +78,7 @@ public class TestYandexSpellerJSON {
         //HEAD
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .log().everything()
                 .head(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
@@ -85,7 +87,7 @@ public class TestYandexSpellerJSON {
         //OPTIONS
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .log().everything()
                 .options(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
@@ -94,7 +96,7 @@ public class TestYandexSpellerJSON {
         //PUT
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .log().everything()
                 .put(YANDEX_SPELLER_CHECK_TEXT_URI)
                 .prettyPeek();
@@ -103,7 +105,7 @@ public class TestYandexSpellerJSON {
         //PATCH
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .log()
                 .everything()
                 .patch(YANDEX_SPELLER_CHECK_TEXT_URI)
@@ -113,7 +115,7 @@ public class TestYandexSpellerJSON {
         //DELETE
         RestAssured
                 .given()
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .log()
                 .everything()
                 .delete(YANDEX_SPELLER_CHECK_TEXT_URI).prettyPeek()
@@ -128,7 +130,7 @@ public class TestYandexSpellerJSON {
     public void useBaseRequestAndResponseSpecifications() {
         RestAssured
                 .given(YandexSpellerApi.baseRequestConfiguration())
-                .param(PARAM_TEXT, SimpleWord.EN_MOSCOW.wrongVer())
+                .param(PARAM_TEXT, EN_MOSCOW.wrongVer())
                 .get().prettyPeek()
                 .then().specification(YandexSpellerApi.successResponse());
     }
@@ -136,10 +138,10 @@ public class TestYandexSpellerJSON {
     @Test
     public void reachBuilderUsage() {
         YandexSpellerApi.with()
-                .language(Language.UK)
-                .options("5")
-                .text(UKR_REPEATED_WORD)
-                .callApi()
+                .language(UK)
+                .options(FIND_REPEAT_WORDS)
+                .text(EN_REPEATED_WORD + " " + EN_REPEATED_WORD)
+                .callApi(CHECK_TEXT)
                 .then().specification(YandexSpellerApi.successResponse());
     }
 
@@ -149,13 +151,13 @@ public class TestYandexSpellerJSON {
     public void validateSpellerAnswerAsAnObject() {
         List<YandexSpellerAnswer> answers =
                 YandexSpellerApi.getYandexSpellerAnswers(
-                        YandexSpellerApi.with().text("motherr fatherr," + SimpleWord.RU_MOSCOW.wrongVer()).callApi());
+                        YandexSpellerApi.with().text("motherr fatherr," + RU_MOSCOW.wrongVer()).callApi(CHECK_TEXT));
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(3));
         assertThat(answers.get(0).word, equalTo("motherr"));
         assertThat(answers.get(1).word, equalTo("fatherr"));
         assertThat(answers.get(0).s.get(0), equalTo("mother"));
         assertThat(answers.get(1).s.get(0), equalTo("father"));
-        assertThat(answers.get(2).s.get(0), equalTo(SimpleWord.RU_MOSCOW.wrongVer()));
+        assertThat(answers.get(2).s.get(0), equalTo(RU_MOSCOW.wrongVer()));
     }
 
     @Test
@@ -164,8 +166,8 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(UKR_WORD_WITH_DIGITS.wrongVer())
-                                .options("2")
-                                .callApi());
+                                .options(IGNORE_DIGITS)
+                                .callApi(CHECK_TEXT));
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
 
@@ -175,8 +177,8 @@ public class TestYandexSpellerJSON {
                 YandexSpellerApi.getYandexSpellerAnswers(
                         YandexSpellerApi.with().
                                 text(EN_MOSCOW.wrongVer())
-                                .options("512")
-                                .callApi());
+                                .options(IGNORE_CAPITALIZATION)
+                                .callApi(CHECK_TEXT));
         assertThat("expected number of answers is wrong.", answers.size(), equalTo(0));
     }
 }

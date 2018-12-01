@@ -3,6 +3,9 @@ package core;
 import beans.YandexSpellerAnswer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import enums.Actions;
+import enums.Language;
+import enums.Options;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -12,9 +15,7 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.http.HttpStatus;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static core.YandexSpellerConstants.*;
 import static org.hamcrest.Matchers.lessThan;
@@ -25,12 +26,12 @@ import static org.hamcrest.Matchers.lessThan;
  */
 public class YandexSpellerApi {
 
-
     //builder pattern
     private YandexSpellerApi() {
     }
 
     private HashMap<String, String> params = new HashMap<>();
+    private List<String> texts = new ArrayList<>();
 
     public static class ApiBuilder {
         YandexSpellerApi spellerApi;
@@ -40,12 +41,21 @@ public class YandexSpellerApi {
         }
 
         public ApiBuilder text(String text) {
-            spellerApi.params.put(PARAM_TEXT, text);
+            spellerApi.texts.add(text);
             return this;
         }
 
-        public ApiBuilder options(String options) {
-            spellerApi.params.put(PARAM_OPTIONS, options);
+        public ApiBuilder texts(String... texts) {
+            spellerApi.texts.addAll(Arrays.asList(texts));
+            return this;
+        }
+
+        public ApiBuilder options(Options... options) {
+            int sum = 0;
+            for (Options option : options) {
+                sum += option.getCode();
+            }
+            spellerApi.params.put(PARAM_OPTIONS, String.valueOf(sum));
             return this;
         }
 
@@ -54,11 +64,12 @@ public class YandexSpellerApi {
             return this;
         }
 
-        public Response callApi() {
+        public Response callApi(Actions action) {
             return RestAssured.with()
-                    .queryParams(spellerApi.params)
+                    .params(spellerApi.params)
+                    .queryParams(PARAM_TEXT, spellerApi.texts)
                     .log().all()
-                    .get(YANDEX_SPELLER_CHECK_TEXT_URI).prettyPeek();
+                    .get(action.getURI()).prettyPeek();
         }
     }
 
@@ -71,6 +82,12 @@ public class YandexSpellerApi {
     //get ready Speller answers list form api response
     public static List<YandexSpellerAnswer> getYandexSpellerAnswers(Response response) {
         return new Gson().fromJson(response.asString().trim(), new TypeToken<List<YandexSpellerAnswer>>() {
+        }.getType());
+    }
+
+    //get ready Speller answers list form api response
+    public static List<List<YandexSpellerAnswer>> getYandexSpellerAnswersTexts(Response response) {
+        return new Gson().fromJson(response.asString().trim(), new TypeToken<List<List<YandexSpellerAnswer>>>() {
         }.getType());
     }
 
